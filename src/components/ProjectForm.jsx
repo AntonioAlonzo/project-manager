@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Input, Button, Typography } from "@material-tailwind/react";
+import { ProjectsContext } from "../store/projects-context";
 
 export default function ProjectForm({ onNewProject }) {
+  const projectContext = useContext(ProjectsContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -20,7 +22,7 @@ export default function ProjectForm({ onNewProject }) {
 
   const submitHandle = (event) => {
     event.preventDefault();
-    onNewProject({
+    projectContext.addProject({
       id: Math.random(),
       title: title,
       description: description,
@@ -32,7 +34,10 @@ export default function ProjectForm({ onNewProject }) {
   return (
     <>
       <Typography variant="h1">Create Project</Typography>
-      <form className="flex flex-col w-[60rem] gap-6 mt-8" onSubmit={submitHandle}>
+      <form
+        className="flex flex-col w-[60rem] gap-6 mt-8"
+        onSubmit={submitHandle}
+      >
         <Input
           type="text"
           onChange={titleChangeHandle}

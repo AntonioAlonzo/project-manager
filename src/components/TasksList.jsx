@@ -11,17 +11,18 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 export default function TasksList({ tasks, index, projectId }) {
   return (
     <>
-      {tasks.length > 0 && (
+      {
         <div className="mt-5">
           <List className="pl-0">
-            {tasks.map((task, index) => (
-              <Task
-                key={index}
-                index={index}
-                task={task}
-                projectId={projectId}
-              ></Task>
-            ))}
+            {tasks.length > 0 &&
+              tasks.map((task, index) => (
+                <Task
+                  key={index}
+                  index={index}
+                  task={task}
+                  projectId={projectId}
+                ></Task>
+              ))}
             <ListItem>
               <ListItemPrefix>
                 <FontAwesomeIcon
@@ -33,7 +34,7 @@ export default function TasksList({ tasks, index, projectId }) {
             </ListItem>
           </List>
         </div>
-      )}
+      }
     </>
   );
 }

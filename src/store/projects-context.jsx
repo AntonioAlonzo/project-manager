@@ -2,6 +2,7 @@ import { createContext, useReducer } from "react";
 
 export const ProjectsContext = createContext({
   projects: [],
+  addProject: () => {},
   deleteProject: () => {},
 });
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   ListItem,
   ListItemSuffix,
@@ -7,9 +7,7 @@ import {
   ListItemPrefix,
   Typography,
 } from "@material-tailwind/react";
-// import TaskDeleteDialog from "./TaskDeleteDialog";
-
-import { useContext } from "react";
+import TaskDeleteDialog from "./TaskDeleteDialog";
 import { ProjectsContext } from "../store/projects-context";
 
 function TrashIcon() {
@@ -30,6 +28,7 @@ function TrashIcon() {
 }
 
 export default function Task({ task, index, projectId }) {
+  const projectContext = useContext(ProjectsContext);
   const [isHovered, setIsHovered] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -38,8 +37,15 @@ export default function Task({ task, index, projectId }) {
     setIsChecked(!isChecked);
   };
 
-  const onDialogOpenHandler = () => {
+  const onDialogOpenHandler = (e) => {
     setIsOpen(!isOpen);
+    e.stopPropagation();
+  };
+
+  const onConfirmDeleteHandler = (e) => {
+    projectContext.deleteTask(projectId, index);
+    setIsOpen(!isOpen);
+    e.stopPropagation();
   };
 
   return (
@@ -68,12 +74,12 @@ export default function Task({ task, index, projectId }) {
             </IconButton>
           </ListItemSuffix>
         )}
-        {/*
         <TaskDeleteDialog
-          isOpen={isOpen}
-          onDialogOpen={onDialogOpenHandler}
+          open={isOpen}
+          handler={onDialogOpenHandler}
+          taskTitle={task.title}
+          confirmDelete={onConfirmDeleteHandler}
         ></TaskDeleteDialog>
-      */}
       </ListItem>
     </>
   );

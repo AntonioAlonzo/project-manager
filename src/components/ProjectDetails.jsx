@@ -4,8 +4,9 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 
 import TasksList from "./TasksList";
 import TaskForm from "./TaskForm";
+import ProjectDeleteDialog from "./ProjectDeleteDialog";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ProjectsContext } from "../store/projects-context";
 
 function ProjectDetails({ project, onDeleteProject }) {
@@ -13,6 +14,19 @@ function ProjectDetails({ project, onDeleteProject }) {
   const month = project.dueDate.toLocaleString("en-US", { month: "long" });
   const day = project.dueDate.toLocaleString("en-US", { day: "2-digit" });
   const year = project.dueDate.getFullYear();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onDialogOpenHandler = (e) => {
+    setIsOpen(!isOpen);
+    e.stopPropagation();
+  };
+
+  const onConfirmDeleteHandler = (e) => {
+    projectContext.deleteProject(project.id);
+    setIsOpen(!isOpen);
+    onDeleteProject();
+    e.stopPropagation();
+  };
 
   return (
     <div>
@@ -30,7 +44,7 @@ function ProjectDetails({ project, onDeleteProject }) {
         <button
           className="flex-1 text-right"
           type="button"
-          onClick={() => onDeleteProject(project.id)}
+          onClick={onDialogOpenHandler}
         >
           Delete
         </button>
@@ -48,6 +62,13 @@ function ProjectDetails({ project, onDeleteProject }) {
       </div>
       <TaskForm projectId={project.id}></TaskForm>
       <TasksList tasks={project.tasks} projectId={project.id}></TasksList>
+
+      <ProjectDeleteDialog
+        open={isOpen}
+        handler={onDialogOpenHandler}
+        projectTitle={project.title}
+        confirmDelete={onConfirmDeleteHandler}
+      ></ProjectDeleteDialog>
     </div>
   );
 }
