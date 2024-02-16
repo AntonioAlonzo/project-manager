@@ -13,29 +13,31 @@ function Sidebar({
   const projectContext = useContext(ProjectsContext);
 
   return (
-    <Card className="h-[calc(100vh)] w-full p-4 shadow-xl rounded-none shadow-blue-gray-900/5 bg-blue-gray-100">
-      <User></User>
-      <div className="mt-2 mb-1 p-2">
-        <Typography variant="h6" color="blue-gray">
-          My Projects
-        </Typography>
-      </div>
+    <>
+      <Card className="h-[calc(100vh)] w-full p-4 shadow-xl rounded-none shadow-blue-gray-900/5 bg-blue-gray-100">
+        <User></User>
+        <div className="mt-2 mb-1 p-2">
+          <Typography variant="h6" color="blue-gray">
+            My Projects
+          </Typography>
+        </div>
 
-      <List className="p-0">
-        {projectContext.projects.map((project) => (
-          <ProjectItem
-            key={project.id}
-            project={project}
-            onProjectClickHandle={onProjectClickHandle}
-            onDeleteProject={onDeleteProject}
-          ></ProjectItem>
-        ))}
-      </List>
+        <List className="p-0">
+          {projectContext.projects.map((project) => (
+            <ProjectItem
+              key={project.id}
+              project={project}
+              onProjectClickHandle={onProjectClickHandle}
+              onDeleteProject={onDeleteProject}
+            ></ProjectItem>
+          ))}
+        </List>
 
-      <ButtonDefault className="mt-5" onClick={() => onCreateProjectClick()}>
-        Create Project
-      </ButtonDefault>
-    </Card>
+        <ButtonDefault className="mt-5" onClick={() => onCreateProjectClick()}>
+          Create Project
+        </ButtonDefault>
+      </Card>
+    </>
   );
 }
 

@@ -34,7 +34,7 @@ export default function Task({ task, index, projectId }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const onTaskClickHandler = () => {
-    setIsChecked(!isChecked);
+    projectContext.checkTask(projectId, index);
   };
 
   const onDialogOpenHandler = (e) => {
@@ -59,7 +59,7 @@ export default function Task({ task, index, projectId }) {
         <ListItemPrefix className="p-0 m-0 ">
           <Checkbox
             className={`${isChecked && "opacity-50"}`}
-            checked={isChecked}
+            checked={task.completed}
             onChange={onTaskClickHandler}
           ></Checkbox>
         </ListItemPrefix>

@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-export default function TasksList({ tasks, index, projectId }) {
+export default function TasksList({ tasks, projectId }) {
   return (
     <>
       {
@@ -17,7 +17,7 @@ export default function TasksList({ tasks, index, projectId }) {
             {tasks.length > 0 &&
               tasks.map((task, index) => (
                 <Task
-                  key={index}
+                  key={task.id}
                   index={index}
                   task={task}
                   projectId={projectId}

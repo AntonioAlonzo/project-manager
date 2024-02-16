@@ -11,13 +11,30 @@ import {
   Typography,
   ListItemPrefix,
 } from "@material-tailwind/react";
+import ProjectDeleteDialog from "./ProjectDeleteDialog";
+import { useContext } from "react";
+import { ProjectsContext } from "../store/projects-context";
 
 export default function ProjectItem({
   project,
   onProjectClickHandle,
   onDeleteProject,
 }) {
+  const projectContext = useContext(ProjectsContext);
   const [isHovered, setIsHovered] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onDialogOpenHandler = (e) => {
+    setIsOpen(!isOpen);
+    e.stopPropagation();
+  };
+
+  const onConfirmDeleteHandler = (e) => {
+    projectContext.deleteProject(project.id);
+    setIsOpen(!isOpen);
+    onDeleteProject();
+    e.stopPropagation();
+  };
 
   let content = project.tasks.length ? (
     <Typography className="opacity-50">{project.tasks.length}</Typography>
@@ -37,7 +54,7 @@ export default function ProjectItem({
             className="text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              onDeleteProject(project.id);
+              onDialogOpenHandler(project.id);
             }}
           >
             Delete
@@ -48,19 +65,27 @@ export default function ProjectItem({
   }
 
   return (
-    <ListItem
-      key={project.id}
-      onClick={() => onProjectClickHandle(project.id)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="p-2"
-    >
-      <ListItemPrefix>#</ListItemPrefix>
-      <div className="flex flex-row w-full items-center">
-        <div className="flex-1">{project.title}</div>
+    <>
+      <ListItem
+        key={project.id}
+        onClick={() => onProjectClickHandle(project.id)}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="p-2"
+      >
+        <ListItemPrefix>#</ListItemPrefix>
+        <div className="flex flex-row w-full items-center">
+          <div className="flex-1">{project.title}</div>
 
-        <div className="flex-1 text-right">{content}</div>
-      </div>
-    </ListItem>
+          <div className="flex-1 text-right">{content}</div>
+        </div>
+      </ListItem>
+      <ProjectDeleteDialog
+        open={isOpen}
+        handler={onDialogOpenHandler}
+        projectTitle={project.title}
+        confirmDelete={onConfirmDeleteHandler}
+      ></ProjectDeleteDialog>
+    </>
   );
 }

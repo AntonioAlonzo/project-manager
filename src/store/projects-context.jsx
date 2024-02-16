@@ -14,7 +14,7 @@ function projectsReducer(state, action) {
   if (action.type === "DELETE_PROJECT") {
     const updatedProjects = [...state.projects];
     const deletedProjectId = updatedProjects.findIndex(
-      (x) => x.id == action.payload.projectId
+      (x) => x.id == action.payload
     );
     updatedProjects.splice(deletedProjectId, 1);
 
@@ -53,6 +53,27 @@ function projectsReducer(state, action) {
         action.payload.taskIndex + 1
       ),
     ];
+
+    updatedProjects[updatedProjectId] = {
+      ...updatedProjects[updatedProjectId],
+      tasks: updatedTasks,
+    };
+
+    return { projects: updatedProjects };
+  }
+
+  if (action.type === "CHECK_TASK") {
+    const updatedProjects = [...state.projects];
+    const updatedProjectId = updatedProjects.findIndex(
+      (x) => x.id == action.payload.projectId
+    );
+
+    const updatedTasks = [...updatedProjects[updatedProjectId].tasks];
+    const completed = updatedTasks[action.payload.taskIndex].completed;
+    updatedTasks[action.payload.taskIndex] = {
+      ...updatedTasks[action.payload.taskIndex],
+      completed: !completed,
+    };
 
     updatedProjects[updatedProjectId] = {
       ...updatedProjects[updatedProjectId],
@@ -135,12 +156,23 @@ export default function ProjectContextProvider({ children }) {
     });
   }
 
+  function checkTaskHandle(projectId, taskIndex) {
+    dispatch({
+      type: "CHECK_TASK",
+      payload: {
+        projectId,
+        taskIndex,
+      },
+    });
+  }
+
   const contextValue = {
     projects: projectsState.projects,
     addProject: addProjectHandle,
     deleteProject: deleteProjectHandle,
     addTask: addTaskHandle,
     deleteTask: deleteTaskHandle,
+    checkTask: checkTaskHandle,
   };
 
   return (
